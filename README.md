@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Assets/MaterialAuthIco.png" alt="materialAuth logo" width="128" />
+  <img src="Assets/MaterialAuthIcon.png" alt="materialAuth logo" width="128" />
 </p>
 
 <h1 align="center">materialAuth</h1>
