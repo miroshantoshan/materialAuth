@@ -44,11 +44,11 @@ enum Appearance: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var title: String {
+    func title(in language: AppLanguage) -> String {
         switch self {
-        case .system: "System"
-        case .light: "Light"
-        case .dark: "Dark"
+        case .system: language.text("System", "Как в системе")
+        case .light: language.text("Light", "Светлая")
+        case .dark: language.text("Dark", "Тёмная")
         }
     }
 
@@ -69,12 +69,12 @@ enum M3Palette: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var title: String {
+    func title(in language: AppLanguage) -> String {
         switch self {
-        case .violet: "Violet"
-        case .blue: "Blue"
-        case .green: "Green"
-        case .coral: "Coral"
+        case .violet: language.text("Violet", "Фиолетовая")
+        case .blue: language.text("Blue", "Синяя")
+        case .green: language.text("Green", "Зелёная")
+        case .coral: language.text("Coral", "Коралловая")
         }
     }
 

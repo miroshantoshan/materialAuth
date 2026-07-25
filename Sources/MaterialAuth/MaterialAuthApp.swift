@@ -4,6 +4,11 @@ import SwiftUI
 struct MaterialAuthApp: App {
     @StateObject private var store = AccountStore()
     @AppStorage("appearance") private var appearance = Appearance.system.rawValue
+    @AppStorage(AppLanguage.storageKey) private var languageName = AppLanguage.english.rawValue
+
+    private var language: AppLanguage {
+        AppLanguage(rawValue: languageName) ?? .english
+    }
 
     var body: some Scene {
         WindowGroup {
@@ -22,7 +27,7 @@ struct MaterialAuthApp: App {
         .windowResizability(.contentSize)
         .commands {
             CommandGroup(replacing: .newItem) {
-                Button("Add Account") {
+                Button(language.text("Add Account", "Добавить аккаунт")) {
                     NotificationCenter.default.post(name: .showAddAccount, object: nil)
                 }
                 .keyboardShortcut("n")

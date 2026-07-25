@@ -8,9 +8,12 @@ enum TOTPError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .invalidSecret: "The secret key has an invalid format."
-        case .invalidURL: "Could not read the otpauth link."
-        case .unsupportedType: "Only TOTP links are supported."
+        case .invalidSecret:
+            AppLanguage.current.text("The secret key has an invalid format.", "Секретный ключ имеет неверный формат.")
+        case .invalidURL:
+            AppLanguage.current.text("Could not read the otpauth link.", "Не удалось прочитать ссылку otpauth.")
+        case .unsupportedType:
+            AppLanguage.current.text("Only TOTP links are supported.", "Поддерживаются только TOTP-ссылки.")
         }
     }
 }
@@ -111,8 +114,8 @@ struct OTPAuthPayload {
             throw TOTPError.invalidSecret
         }
 
-        let issuer = query["issuer"] ?? (parts.count > 1 ? parts[0] : "Account")
-        let name = parts.count > 1 ? parts[1] : (parts.first ?? "Untitled")
+        let issuer = query["issuer"] ?? (parts.count > 1 ? parts[0] : AppLanguage.current.text("Account", "Аккаунт"))
+        let name = parts.count > 1 ? parts[1] : (parts.first ?? AppLanguage.current.text("Untitled", "Без названия"))
         let digits = Int(query["digits"] ?? "") ?? 6
         let period = Int(query["period"] ?? "") ?? 30
         let algorithm = OTPAlgorithm(rawValue: (query["algorithm"] ?? "SHA1").uppercased()) ?? .sha1

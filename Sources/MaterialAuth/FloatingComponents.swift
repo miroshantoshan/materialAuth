@@ -67,6 +67,7 @@ struct FloatingSegment<Item: Identifiable, Label: View>: View where Item.ID: Has
 
 struct FloatingPalettePicker: View {
     @Binding var selection: String
+    let language: AppLanguage
     @Environment(\.m3) private var theme
 
     private let palettes = M3Palette.allCases
@@ -107,7 +108,7 @@ struct FloatingPalettePicker: View {
                                                 .foregroundStyle(.white)
                                         }
                                     }
-                                    Text(palette.title)
+                                    Text(palette.title(in: language))
                                         .font(.system(size: 10, weight: .semibold))
                                         .foregroundStyle(
                                             selection == palette.rawValue

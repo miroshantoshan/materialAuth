@@ -7,8 +7,8 @@ enum QRCodeImporter {
     @MainActor
     static func chooseAndRead() throws -> String? {
         let panel = NSOpenPanel()
-        panel.title = "Choose an Image with a QR Code"
-        panel.prompt = "Read QR Code"
+        panel.title = AppLanguage.current.text("Choose an Image with a QR Code", "Выберите изображение с QR-кодом")
+        panel.prompt = AppLanguage.current.text("Read QR Code", "Считать QR-код")
         panel.allowedContentTypes = [.png, .jpeg, .heic, .tiff, .image]
         panel.allowsMultipleSelection = false
 
@@ -56,9 +56,15 @@ enum QRImportError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .invalidImage: "Could not open the image."
-        case .notFound: "No QR code was found in the image."
-        case .unsupportedContent: "The QR code does not contain an otpauth link."
+        case .invalidImage:
+            AppLanguage.current.text("Could not open the image.", "Не удалось открыть изображение.")
+        case .notFound:
+            AppLanguage.current.text("No QR code was found in the image.", "На изображении не найден QR-код.")
+        case .unsupportedContent:
+            AppLanguage.current.text(
+                "The QR code does not contain an otpauth link.",
+                "QR-код не содержит ссылку otpauth."
+            )
         }
     }
 }

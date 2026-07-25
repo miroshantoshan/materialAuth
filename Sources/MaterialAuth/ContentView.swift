@@ -11,6 +11,7 @@ struct ContentView: View {
     @EnvironmentObject private var store: AccountStore
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage("palette") private var paletteName = M3Palette.violet.rawValue
+    @AppStorage(AppLanguage.storageKey) private var languageName = AppLanguage.english.rawValue
     @State private var search = ""
     @State private var screen = Screen.accounts
     @State private var copiedID: UUID?
@@ -23,6 +24,14 @@ struct ContentView: View {
 
     private var theme: M3Theme {
         M3Theme(palette: palette, scheme: colorScheme)
+    }
+
+    private var language: AppLanguage {
+        AppLanguage(rawValue: languageName) ?? .english
+    }
+
+    private func t(_ english: String, _ russian: String) -> String {
+        language.text(english, russian)
     }
 
     private var filteredAccounts: [OTPAccount] {
@@ -67,11 +76,11 @@ struct ContentView: View {
         .clipped()
         .background(WindowHeightController(height: windowHeight))
         .environment(\.m3, theme)
-        .alert("Something Went Wrong", isPresented: Binding(
+        .alert(t("Something Went Wrong", "Что-то пошло не так"), isPresented: Binding(
             get: { store.errorMessage != nil },
             set: { if !$0 { store.errorMessage = nil } }
         )) {
-            Button("OK") { store.errorMessage = nil }
+            Button(t("OK", "Понятно")) { store.errorMessage = nil }
         } message: {
             Text(store.errorMessage ?? "")
         }
@@ -84,7 +93,7 @@ struct ContentView: View {
         VStack(spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Codes")
+                    Text(t("Codes", "Коды"))
                         .font(.system(size: 28, weight: .semibold, design: .rounded))
                         .foregroundStyle(theme.onSurface)
                     Text("\(store.accounts.count) \(accountWord(store.accounts.count))")
@@ -101,7 +110,7 @@ struct ContentView: View {
                         .frame(width: 40, height: 40)
                 }
                 .buttonStyle(M3IconButtonStyle())
-                .help("Appearance")
+                .help(t("Appearance", "Оформление"))
 
                 Button {
                     navigate(to: .addAccount)
@@ -110,14 +119,14 @@ struct ContentView: View {
                         .frame(width: 40, height: 40)
                 }
                 .buttonStyle(M3IconButtonStyle())
-                .help("Add Account")
+                .help(t("Add Account", "Добавить аккаунт"))
             }
 
             if !store.accounts.isEmpty {
                 HStack(spacing: 10) {
                     Image(systemName: "magnifyingglass")
                         .foregroundStyle(theme.onSurfaceVariant)
-                    TextField("Search", text: $search)
+                    TextField(t("Search", "Поиск"), text: $search)
                         .textFieldStyle(.plain)
                     if !search.isEmpty {
                         Button {
@@ -152,7 +161,7 @@ struct ContentView: View {
                 }
 
                 if filteredAccounts.isEmpty {
-                    Text("No Results")
+                    Text(t("No Results", "Ничего не найдено"))
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(theme.onSurfaceVariant)
                         .padding(.top, 48)
@@ -177,17 +186,20 @@ struct ContentView: View {
             }
 
             VStack(spacing: 7) {
-                Text("Your Codes Will Appear Here")
+                Text(t("Your Codes Will Appear Here", "Здесь будут ваши коды"))
                     .font(.system(size: 20, weight: .semibold, design: .rounded))
                     .foregroundStyle(theme.onSurface)
-                Text("Add a secret key or paste\nan otpauth:// link")
+                Text(t(
+                    "Add a secret key or paste\nan otpauth:// link",
+                    "Добавьте секретный ключ или вставьте\nссылку формата otpauth://"
+                ))
                     .font(.system(size: 14))
                     .multilineTextAlignment(.center)
                     .foregroundStyle(theme.onSurfaceVariant)
                     .lineSpacing(3)
             }
 
-            Button("Add Account") {
+            Button(t("Add Account", "Добавить аккаунт")) {
                 navigate(to: .addAccount)
             }
             .buttonStyle(M3FilledButtonStyle())
@@ -219,7 +231,15 @@ struct ContentView: View {
     }
 
     private func accountWord(_ count: Int) -> String {
-        count == 1 ? "account" : "accounts"
+        if language == .english {
+            return count == 1 ? "account" : "accounts"
+        }
+        let remainder100 = count % 100
+        let remainder10 = count % 10
+        if remainder100 >= 11 && remainder100 <= 14 { return "аккаунтов" }
+        if remainder10 == 1 { return "аккаунт" }
+        if remainder10 >= 2 && remainder10 <= 4 { return "аккаунта" }
+        return "аккаунтов"
     }
 
     private var windowHeight: CGFloat {
@@ -285,6 +305,7 @@ private struct OTPCard: View {
 
     @EnvironmentObject private var store: AccountStore
     @Environment(\.m3) private var theme
+    @AppStorage(AppLanguage.storageKey) private var languageName = AppLanguage.english.rawValue
     @State private var now = Date()
     @State private var hovering = false
 
@@ -303,6 +324,14 @@ private struct OTPCard: View {
 
     private var remaining: Int {
         TOTP.remaining(period: account.period, date: now)
+    }
+
+    private var language: AppLanguage {
+        AppLanguage(rawValue: languageName) ?? .english
+    }
+
+    private func t(_ english: String, _ russian: String) -> String {
+        language.text(english, russian)
     }
 
     var body: some View {
@@ -357,7 +386,7 @@ private struct OTPCard: View {
             .animation(.spring(response: 0.28, dampingFraction: 0.82), value: hovering)
             .overlay(alignment: .topTrailing) {
                 if copied {
-                    Text("Copied")
+                    Text(t("Copied", "Скопировано"))
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(theme.onPrimaryContainer)
                         .padding(.horizontal, 10)
@@ -370,11 +399,11 @@ private struct OTPCard: View {
             .onTapGesture(perform: onCopy)
             .onHover { hovering = $0 }
             .contextMenu {
-                Button("Copy Code", action: onCopy)
+                Button(t("Copy Code", "Скопировать код"), action: onCopy)
                 Divider()
-                Button("Delete", role: .destructive, action: onDelete)
+                Button(t("Delete", "Удалить"), role: .destructive, action: onDelete)
             }
-            .help("Click to copy")
+            .help(t("Click to copy", "Нажмите, чтобы скопировать"))
         }
     }
 
