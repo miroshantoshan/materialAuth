@@ -67,11 +67,11 @@ struct ContentView: View {
         .clipped()
         .background(WindowHeightController(height: windowHeight))
         .environment(\.m3, theme)
-        .alert("Что-то пошло не так", isPresented: Binding(
+        .alert("Something Went Wrong", isPresented: Binding(
             get: { store.errorMessage != nil },
             set: { if !$0 { store.errorMessage = nil } }
         )) {
-            Button("Понятно") { store.errorMessage = nil }
+            Button("OK") { store.errorMessage = nil }
         } message: {
             Text(store.errorMessage ?? "")
         }
@@ -84,7 +84,7 @@ struct ContentView: View {
         VStack(spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Коды")
+                    Text("Codes")
                         .font(.system(size: 28, weight: .semibold, design: .rounded))
                         .foregroundStyle(theme.onSurface)
                     Text("\(store.accounts.count) \(accountWord(store.accounts.count))")
@@ -101,7 +101,7 @@ struct ContentView: View {
                         .frame(width: 40, height: 40)
                 }
                 .buttonStyle(M3IconButtonStyle())
-                .help("Оформление")
+                .help("Appearance")
 
                 Button {
                     navigate(to: .addAccount)
@@ -110,14 +110,14 @@ struct ContentView: View {
                         .frame(width: 40, height: 40)
                 }
                 .buttonStyle(M3IconButtonStyle())
-                .help("Добавить аккаунт")
+                .help("Add Account")
             }
 
             if !store.accounts.isEmpty {
                 HStack(spacing: 10) {
                     Image(systemName: "magnifyingglass")
                         .foregroundStyle(theme.onSurfaceVariant)
-                    TextField("Поиск", text: $search)
+                    TextField("Search", text: $search)
                         .textFieldStyle(.plain)
                     if !search.isEmpty {
                         Button {
@@ -152,7 +152,7 @@ struct ContentView: View {
                 }
 
                 if filteredAccounts.isEmpty {
-                    Text("Ничего не найдено")
+                    Text("No Results")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(theme.onSurfaceVariant)
                         .padding(.top, 48)
@@ -177,17 +177,17 @@ struct ContentView: View {
             }
 
             VStack(spacing: 7) {
-                Text("Здесь будут ваши коды")
+                Text("Your Codes Will Appear Here")
                     .font(.system(size: 20, weight: .semibold, design: .rounded))
                     .foregroundStyle(theme.onSurface)
-                Text("Добавьте секретный ключ или вставьте\nссылку формата otpauth://")
+                Text("Add a secret key or paste\nan otpauth:// link")
                     .font(.system(size: 14))
                     .multilineTextAlignment(.center)
                     .foregroundStyle(theme.onSurfaceVariant)
                     .lineSpacing(3)
             }
 
-            Button("Добавить аккаунт") {
+            Button("Add Account") {
                 navigate(to: .addAccount)
             }
             .buttonStyle(M3FilledButtonStyle())
@@ -219,7 +219,7 @@ struct ContentView: View {
     }
 
     private func accountWord(_ count: Int) -> String {
-        count == 1 ? "аккаунт" : "аккаунтов"
+        count == 1 ? "account" : "accounts"
     }
 
     private var windowHeight: CGFloat {
@@ -357,7 +357,7 @@ private struct OTPCard: View {
             .animation(.spring(response: 0.28, dampingFraction: 0.82), value: hovering)
             .overlay(alignment: .topTrailing) {
                 if copied {
-                    Text("Скопировано")
+                    Text("Copied")
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(theme.onPrimaryContainer)
                         .padding(.horizontal, 10)
@@ -370,11 +370,11 @@ private struct OTPCard: View {
             .onTapGesture(perform: onCopy)
             .onHover { hovering = $0 }
             .contextMenu {
-                Button("Скопировать код", action: onCopy)
+                Button("Copy Code", action: onCopy)
                 Divider()
-                Button("Удалить", role: .destructive, action: onDelete)
+                Button("Delete", role: .destructive, action: onDelete)
             }
-            .help("Нажмите, чтобы скопировать")
+            .help("Click to copy")
         }
     }
 

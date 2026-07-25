@@ -22,7 +22,7 @@ struct MaterialAuthApp: App {
         .windowResizability(.contentSize)
         .commands {
             CommandGroup(replacing: .newItem) {
-                Button("Добавить аккаунт") {
+                Button("Add Account") {
                     NotificationCenter.default.post(name: .showAddAccount, object: nil)
                 }
                 .keyboardShortcut("n")

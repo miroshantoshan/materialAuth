@@ -26,12 +26,12 @@ struct SettingsView: View {
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(theme.onSurface)
-                .help("Назад")
+                .help("Back")
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Оформление")
+                    Text("Appearance")
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
-                    Text("Настройте настроение приложения")
+                    Text("Customize the look and feel")
                         .font(.system(size: 12))
                         .foregroundStyle(theme.onSurfaceVariant)
                 }
@@ -43,14 +43,14 @@ struct SettingsView: View {
             ScrollView(.vertical) {
                 VStack(alignment: .leading, spacing: 22) {
                     VStack(alignment: .leading, spacing: 10) {
-                        sectionTitle("Тема")
+                        sectionTitle("Theme")
                         FloatingSegment(items: Appearance.allCases, selection: $appearance) { item in
                             Text(item.title)
                         }
                     }
 
                     VStack(alignment: .leading, spacing: 10) {
-                        sectionTitle("Цветовая схема Material 3")
+                        sectionTitle("Material 3 Color Scheme")
                         FloatingPalettePicker(selection: $paletteName)
                     }
 

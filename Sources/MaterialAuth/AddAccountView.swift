@@ -12,9 +12,9 @@ struct AddAccountView: View {
 
         var title: String {
             switch self {
-            case .qr: "QR-код"
-            case .link: "Ссылка"
-            case .manual: "Вручную"
+            case .qr: "QR Code"
+            case .link: "Link"
+            case .manual: "Manual"
             }
         }
 
@@ -72,12 +72,12 @@ struct AddAccountView: View {
 
             HStack {
                 Spacer()
-                Button("Отмена", action: onBack)
+                Button("Cancel", action: onBack)
                     .buttonStyle(.plain)
                     .foregroundStyle(theme.primary)
                     .padding(.horizontal, 14)
 
-                Button("Добавить", action: add)
+                Button("Add", action: add)
                     .buttonStyle(M3FilledButtonStyle())
                     .disabled(!isValid)
                     .opacity(isValid ? 1 : 0.45)
@@ -104,13 +104,13 @@ struct AddAccountView: View {
             }
             .buttonStyle(.plain)
             .foregroundStyle(theme.onSurface)
-            .help("Назад")
+            .help("Back")
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Новый аккаунт")
+                Text("New Account")
                     .font(.system(size: 24, weight: .semibold, design: .rounded))
                     .foregroundStyle(theme.onSurface)
-                Text("Секрет останется в Keychain этого Mac")
+                Text("Your secret stays in this Mac's Keychain")
                     .font(.system(size: 12))
                     .foregroundStyle(theme.onSurfaceVariant)
             }
@@ -133,10 +133,10 @@ struct AddAccountView: View {
                 }
 
                 VStack(spacing: 6) {
-                    Text("Импорт из QR-кода")
+                    Text("Import from QR Code")
                         .font(.system(size: 19, weight: .semibold, design: .rounded))
                         .foregroundStyle(theme.onSurface)
-                    Text("Выберите скриншот или изображение QR-кода,\nкоторый показал сервис при настройке 2FA.")
+                    Text("Choose a screenshot or QR code image\nprovided by the service during 2FA setup.")
                         .font(.system(size: 13))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(theme.onSurfaceVariant)
@@ -146,7 +146,7 @@ struct AddAccountView: View {
                 Button {
                     importQR()
                 } label: {
-                    Label("Выбрать изображение", systemImage: "photo.badge.plus")
+                    Label("Choose Image", systemImage: "photo.badge.plus")
                 }
                 .buttonStyle(M3FilledButtonStyle())
             }
@@ -159,10 +159,10 @@ struct AddAccountView: View {
     private var linkContent: some View {
         FloatingIsland(padding: 18) {
             VStack(alignment: .leading, spacing: 10) {
-                fieldLabel("Ссылка otpauth")
+                fieldLabel("otpauth Link")
                 TextField("otpauth://totp/…", text: $uri)
                     .textFieldStyle(M3TextFieldStyle())
-                Text("Скопируйте полную ссылку из сервиса.")
+                Text("Paste the complete link provided by the service.")
                     .font(.system(size: 11))
                     .foregroundStyle(theme.onSurfaceVariant)
                     .padding(.leading, 6)
@@ -174,28 +174,28 @@ struct AddAccountView: View {
         FloatingIsland(padding: 18) {
             VStack(alignment: .leading, spacing: 14) {
                 VStack(alignment: .leading, spacing: 8) {
-                    fieldLabel("Сервис")
-                    TextField("Например, GitHub", text: $issuer)
+                    fieldLabel("Service")
+                    TextField("For example, GitHub", text: $issuer)
                         .textFieldStyle(M3TextFieldStyle())
                 }
                 VStack(alignment: .leading, spacing: 8) {
-                    fieldLabel("Имя аккаунта")
+                    fieldLabel("Account Name")
                     TextField("name@example.com", text: $accountName)
                         .textFieldStyle(M3TextFieldStyle())
                 }
                 VStack(alignment: .leading, spacing: 8) {
-                    fieldLabel("Секретный ключ")
+                    fieldLabel("Secret Key")
                     SecureField("JBSWY3DPEHPK3PXP", text: $secret)
                         .textFieldStyle(M3TextFieldStyle())
                 }
 
                 HStack(spacing: 12) {
-                    compactPicker("Алгоритм", selection: $algorithm) {
+                    compactPicker("Algorithm", selection: $algorithm) {
                         ForEach(OTPAlgorithm.allCases) {
                             Text($0.rawValue).tag($0)
                         }
                     }
-                    compactPicker("Цифр", selection: $digits) {
+                    compactPicker("Digits", selection: $digits) {
                         Text("6").tag(6)
                         Text("8").tag(8)
                     }

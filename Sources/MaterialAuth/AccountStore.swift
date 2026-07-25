@@ -50,7 +50,7 @@ final class AccountStore: ObservableObject {
         do {
             accounts = try JSONDecoder().decode([OTPAccount].self, from: data)
         } catch {
-            errorMessage = "Не удалось загрузить сохранённые аккаунты."
+            errorMessage = "Could not load saved accounts."
         }
     }
 
@@ -58,7 +58,7 @@ final class AccountStore: ObservableObject {
         do {
             UserDefaults.standard.set(try JSONEncoder().encode(accounts), forKey: defaultsKey)
         } catch {
-            errorMessage = "Не удалось сохранить список аккаунтов."
+            errorMessage = "Could not save the account list."
         }
     }
 }

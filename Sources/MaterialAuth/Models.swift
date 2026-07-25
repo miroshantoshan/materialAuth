@@ -46,9 +46,9 @@ enum Appearance: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .system: "Как в системе"
-        case .light: "Светлая"
-        case .dark: "Тёмная"
+        case .system: "System"
+        case .light: "Light"
+        case .dark: "Dark"
         }
     }
 
@@ -71,10 +71,10 @@ enum M3Palette: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .violet: "Фиолетовая"
-        case .blue: "Синяя"
-        case .green: "Зелёная"
-        case .coral: "Коралловая"
+        case .violet: "Violet"
+        case .blue: "Blue"
+        case .green: "Green"
+        case .coral: "Coral"
         }
     }
 
